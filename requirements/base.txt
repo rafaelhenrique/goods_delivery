@@ -1,0 +1,4 @@
+Django==1.10.4
+djangorestframework==3.5.3
+python-decouple==3.0
+dj-database-url==0.4.1

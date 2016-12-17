@@ -1,0 +1,16 @@
+language: python
+
+python:
+  - "3.5"
+
+install:
+  - make .env env=test
+  - pip install -r requirements/dev.txt
+
+script:
+  - make test-travis
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+

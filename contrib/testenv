@@ -1,0 +1,4 @@
+SECRET_KEY=secretshhhhh
+DEBUG=False
+ALLOWED_HOSTS=127.0.0.1, .localhost
+DATABASE_URL=sqlite:///db-test.sqlite3

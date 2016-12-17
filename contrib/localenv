@@ -1,0 +1,6 @@
+# This is an example of configuration and can be changed
+# See Django documentation to understand this paramethers: https://docs.djangoproject.com/en/1.10/ref/settings/
+SECRET_KEY=<your secret key here>
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1, .localhost, .abraseucodigo.com.br
+DATABASE_URL=sqlite:///db.sqlite3
