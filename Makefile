@@ -53,7 +53,7 @@ test-travis: clean check check-debugger ## Test on travis CI
 
 check:  ## Run code static checks
 	@flake8 --exclude *migrations* .
-	@isort --check
+	@isort --check --skip-glob *migrations*
 
 check-debugger: ## Check if has set_trace on files
 	@find goods_delivery -type f -exec egrep -iH "set_trace" {} \+ && echo "Ooops! Found 1 set_trace on your source code!" && exit 1 ||     exit 0
