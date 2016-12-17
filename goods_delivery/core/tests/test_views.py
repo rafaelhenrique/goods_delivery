@@ -92,6 +92,13 @@ class TestMapView:
         assert Map.objects.count() == 1
         assert Route.objects.count() == 6
 
+    def test_get_all_maps(self, authorized_client):
+        routes = mixer.cycle(6).blend(Route)
+        mixer.blend(Map, routes=routes)
+        resp = authorized_client.get(self.url,
+                                     content_type='application/json')
+        assert resp.status_code == status.HTTP_200_OK
+
 
 @pytest.mark.django_db
 class TestMapDetailView:

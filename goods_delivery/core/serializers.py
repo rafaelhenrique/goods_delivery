@@ -9,6 +9,14 @@ class RouteSerializer(serializers.ModelSerializer):
         fields = ('start', 'end', 'distance')
 
 
+class MapListSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(format='hex_verbose', read_only=True)
+
+    class Meta:
+        model = Map
+        fields = ('id', 'name')
+
+
 class MapSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(format='hex_verbose', read_only=True)
     routes = RouteSerializer(many=True)
