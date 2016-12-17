@@ -99,6 +99,11 @@ class TestMapView:
                                      content_type='application/json')
         assert resp.status_code == status.HTTP_200_OK
 
+    def test_get_without_maps_on_database(self, authorized_client):
+        resp = authorized_client.get(self.url,
+                                     content_type='application/json')
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+
 
 @pytest.mark.django_db
 class TestMapDetailView:
