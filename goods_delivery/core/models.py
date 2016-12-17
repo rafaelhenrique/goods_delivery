@@ -30,7 +30,8 @@ class Route(BaseModel):
 
 
 class Map(BaseModel):
-    name = models.CharField(max_length=32, null=False, blank=False)
+    name = models.CharField(max_length=64, null=False, blank=False,
+                            unique=True)
     routes = models.ManyToManyField(Route, blank=False, related_name='maps')
 
     class Meta:
