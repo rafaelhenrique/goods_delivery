@@ -10,6 +10,7 @@ class RouteSerializer(serializers.ModelSerializer):
 
 
 class MapSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(format='hex_verbose', read_only=True)
     routes = RouteSerializer(many=True)
 
     def create(self, validated_data):
@@ -22,4 +23,4 @@ class MapSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Map
-        fields = ('name', 'routes')
+        fields = ('id', 'name', 'routes')

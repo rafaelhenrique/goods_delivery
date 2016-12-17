@@ -1,8 +1,10 @@
 import json
+from uuid import uuid4
 
 import pytest
 from django.core.urlresolvers import reverse
 from rest_framework import status
+from mixer.backend.django import mixer
 
 from goods_delivery.core.models import Map, Route
 
@@ -89,3 +91,23 @@ class TestMapView:
 
         assert Map.objects.count() == 1
         assert Route.objects.count() == 6
+
+
+@pytest.mark.django_db
+class TestMapDetailView:
+
+    def setup(self):
+        self.routes = mixer.cycle(6).blend(Route)
+        self.map = mixer.blend(Map, routes=self.routes)
+        self.url = reverse('core:map_detail',
+                           kwargs={'map_id': str(self.map.id)})
+
+    def test_get_authorized_client(self, authorized_client):
+        resp = authorized_client.get(self.url, content_type='application/json')
+        assert resp.status_code == status.HTTP_200_OK
+
+    def test_get_authorized_client_with_invalid_id(self, authorized_client):
+        fake_uuid = str(uuid4())
+        url = reverse('core:map_detail', kwargs={'map_id': fake_uuid})
+        resp = authorized_client.get(url, content_type='application/json')
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
