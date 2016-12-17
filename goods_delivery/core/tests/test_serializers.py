@@ -1,6 +1,7 @@
 import pytest
-from goods_delivery.core.serializers import RouteSerializer, MapSerializer
-from goods_delivery.core.models import Route, Map
+
+from goods_delivery.core.models import Map, Route
+from goods_delivery.core.serializers import MapSerializer, RouteSerializer
 
 
 @pytest.mark.django_db

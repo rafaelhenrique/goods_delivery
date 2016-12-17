@@ -16,5 +16,6 @@ class MapAdmin(admin.ModelAdmin):
 class RouteAdmin(admin.ModelAdmin):
     list_display = ('start', 'end', 'distance')
 
+
 admin.site.register(Map, MapAdmin)
 admin.site.register(Route, RouteAdmin)

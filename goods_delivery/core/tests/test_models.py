@@ -1,7 +1,8 @@
 import pytest
-from mixer.backend.django import mixer
 from django.db import IntegrityError
-from goods_delivery.core.models import Route, Map
+from mixer.backend.django import mixer
+
+from goods_delivery.core.models import Map, Route
 
 
 @pytest.mark.django_db
