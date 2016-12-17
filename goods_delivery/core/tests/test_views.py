@@ -3,8 +3,8 @@ from uuid import uuid4
 
 import pytest
 from django.core.urlresolvers import reverse
-from rest_framework import status
 from mixer.backend.django import mixer
+from rest_framework import status
 
 from goods_delivery.core.models import Map, Route
 

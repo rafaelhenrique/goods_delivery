@@ -2,8 +2,8 @@ from rest_framework import authentication, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import MapSerializer, MapListSerializer
 from .models import Map
+from .serializers import MapListSerializer, MapSerializer
 
 
 class MapView(APIView):
