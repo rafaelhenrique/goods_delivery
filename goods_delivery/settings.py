@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     # 3rd apps
     'rest_framework',
     'rest_framework.authtoken',
+    # local apps,
+    'goods_delivery.core',
 ]
 
 MIDDLEWARE = [
