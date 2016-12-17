@@ -52,7 +52,7 @@ test-travis: clean check check-debugger ## Test on travis CI
 	@py.test --cov-config .coveragerc --cov goods_delivery goods_delivery --ds=$(SETTINGS) --cov-report term-missing --cov-fail-under=90
 
 check:  ## Run code static checks
-	@flake8 .
+	@flake8 --exclude *migrations* .
 	@isort --check
 
 check-debugger: ## Check if has set_trace on files
