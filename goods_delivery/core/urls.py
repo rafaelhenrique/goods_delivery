@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import MapDetailView, MapView, MapDetailShortPathView
+from .views import MapDetailShortPathView, MapDetailView, MapView
 
 urlpatterns = [
     url(r'map$', MapView.as_view(), name='map'),

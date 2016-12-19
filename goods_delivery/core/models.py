@@ -1,7 +1,8 @@
 import uuid
 from decimal import Decimal
-from django.db import models
+
 import networkx as nx
+from django.db import models
 
 
 class BaseModel(models.Model):
