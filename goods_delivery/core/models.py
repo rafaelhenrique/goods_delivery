@@ -54,8 +54,8 @@ class Map(BaseModel):
         Return short path based on start, end and lower distance.
 
         Paramethers:
-            start: Some name of Route.start (model Route)
-            end: Some name of Route.end (model Route)
+            start (str): Some name of Route.start (model Route)
+            end (str): Some name of Route.end (model Route)
 
         Returns:
             tuple when element 0 is a better route
