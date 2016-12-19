@@ -28,13 +28,6 @@ class TestMapView:
         return json.dumps(payload)
 
     @pytest.fixture
-    def missing_data_payload(self):
-        payload = {
-            'name': 'Map01',
-        }
-        return json.dumps(payload)
-
-    @pytest.fixture
     def missing_fields_payload(self):
         payload = {
             'name': 'Map01',
@@ -57,10 +50,8 @@ class TestMapView:
                                       content_type='application/json')
         assert resp.status_code == status.HTTP_201_CREATED
 
-    def test_post_with_missing_data(self, authorized_client,
-                                    missing_data_payload):
-        resp = authorized_client.post(self.url,
-                                      missing_data_payload,
+    def test_post_with_missing_data(self, authorized_client):
+        resp = authorized_client.post(self.url, {},
                                       content_type='application/json')
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
 
