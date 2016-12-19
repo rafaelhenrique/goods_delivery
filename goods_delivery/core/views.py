@@ -46,13 +46,9 @@ class MapDetailShortPathView(APIView):
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    def post(self, request, map_id):
+    def get(self, request, map_id, start, end):
         try:
             map_object = Map.objects.get(id=map_id)
-            serializer = PathSerializer(data=request.data)
-            if serializer.is_valid():
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({}, status=status.HTTP_200_OK)
         except Map.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
