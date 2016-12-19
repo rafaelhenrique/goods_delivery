@@ -139,6 +139,26 @@ class TestMapDetailShortPathView:
         }
         return json.dumps(payload)
 
+    @pytest.fixture
+    def not_found_start_payload(self):
+        payload = {
+            'start': 'G',
+            'end': 'D',
+            'autonomy': '10.0',
+            'fuel_price': '2.5',
+        }
+        return json.dumps(payload)
+
+    @pytest.fixture
+    def not_found_end_payload(self):
+        payload = {
+            'start': 'A',
+            'end': 'G',
+            'autonomy': '10.0',
+            'fuel_price': '2.5',
+        }
+        return json.dumps(payload)
+
     def setup(self):
         self.routes = (
             mixer.blend(Route, start='A', end='B', distance=10),
@@ -184,3 +204,17 @@ class TestMapDetailShortPathView:
                                       content_type='application/json')
         assert resp.json() == {'cost': Decimal('6.25'),
                                'path': ['A', 'B', 'D']}
+
+    def test_post_not_found_start_value(self, authorized_client,
+                                        not_found_start_payload):
+        resp = authorized_client.post(self.url,
+                                      not_found_start_payload,
+                                      content_type='application/json')
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_post_not_found_end_value(self, authorized_client,
+                                      not_found_end_payload):
+        resp = authorized_client.post(self.url,
+                                      not_found_end_payload,
+                                      content_type='application/json')
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST

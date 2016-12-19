@@ -39,3 +39,21 @@ class PathSerializer(serializers.Serializer):
     end = serializers.CharField(max_length=32)
     autonomy = serializers.DecimalField(max_digits=10, decimal_places=3)
     fuel_price = serializers.DecimalField(max_digits=10, decimal_places=3)
+
+    def validate_start(self, value):
+        """
+        Check that the start value is a valid start route.
+        """
+        routes = Route.objects.filter(start=value)
+        if not routes:
+            raise serializers.ValidationError("start value not found.")
+        return value
+
+    def validate_end(self, value):
+        """
+        Check that the end value is a valid end route.
+        """
+        routes = Route.objects.filter(end=value)
+        if not routes:
+            raise serializers.ValidationError("end value not found.")
+        return value
