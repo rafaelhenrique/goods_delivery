@@ -1,5 +1,6 @@
 import json
 from uuid import uuid4
+from decimal import Decimal
 
 import pytest
 from django.core.urlresolvers import reverse
@@ -139,8 +140,15 @@ class TestMapDetailShortPathView:
         return json.dumps(payload)
 
     def setup(self):
-        self.routes = mixer.cycle(6).blend(Route)
-        self.map = mixer.blend(Map, routes=self.routes)
+        self.routes = (
+            mixer.blend(Route, start='A', end='B', distance=10),
+            mixer.blend(Route, start='B', end='D', distance=15),
+            mixer.blend(Route, start='A', end='C', distance=20),
+            mixer.blend(Route, start='C', end='D', distance=30),
+            mixer.blend(Route, start='B', end='E', distance=50),
+            mixer.blend(Route, start='D', end='E', distance=30),
+        )
+        self.map = mixer.blend(Map, name='SP', routes=self.routes)
         self.url = reverse('core:map_detail_short_path',
                            kwargs={'map_id': str(self.map.id)})
 
@@ -169,3 +177,10 @@ class TestMapDetailShortPathView:
         resp = authorized_client.post(self.url, {},
                                       content_type='application/json')
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_post_authorized_client_content(self, authorized_client,
+                                            correct_payload):
+        resp = authorized_client.post(self.url, correct_payload,
+                                      content_type='application/json')
+        assert resp.json() == {'cost': Decimal('6.25'),
+                               'path': ['A', 'B', 'D']}
