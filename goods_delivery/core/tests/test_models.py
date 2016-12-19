@@ -68,3 +68,17 @@ class TestMap(object):
         assert route_01.maps.first() == route_02.maps.first() == map_object
         assert map_object.routes.first().start == 'B'
         assert map_object.routes.last().start == 'A'
+
+    def test_short_path(self):
+        routes = (
+            mixer.blend(Route, start='A', end='B', distance=10),
+            mixer.blend(Route, start='B', end='D', distance=15),
+            mixer.blend(Route, start='A', end='C', distance=20),
+            mixer.blend(Route, start='C', end='D', distance=30),
+            mixer.blend(Route, start='B', end='E', distance=50),
+            mixer.blend(Route, start='D', end='E', distance=30),
+        )
+        map_ = mixer.blend(Map, name='SP', routes=routes)
+        short_path, lenght = map_.short_path(start='A', end='D')
+        assert short_path == ['A', 'B', 'D']
+        assert lenght == 25

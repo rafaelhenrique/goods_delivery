@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+import networkx as nx
 
 
 class BaseModel(models.Model):
@@ -46,3 +47,27 @@ class Map(BaseModel):
         representation = ('Map(name={!r}, created_at={!r}, modified_at={!r})')
         return representation.format(self.name, self.created_at,
                                      self.modified_at)
+
+    def short_path(self, start, end):
+        """
+        Return short path based on start, end and lower distance.
+
+        Paramethers:
+            start: Some name of route.start
+            end: Some name of route.end
+
+        Returns:
+            tuple when element 0 is a better route
+                       element 1 is a length of route
+        """
+
+        # create graph
+        G = nx.Graph()
+        # add weighted edges
+        weighted_edges = self.routes.values_list('start', 'end', 'distance')
+        G.add_weighted_edges_from(weighted_edges)
+        # get better route
+        better_route = nx.dijkstra_path(G, start, end)
+        # get length of route
+        length = nx.dijkstra_path_length(G, start, end)
+        return better_route, length
