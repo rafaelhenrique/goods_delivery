@@ -1,4 +1,5 @@
 import uuid
+from decimal import Decimal
 from django.db import models
 import networkx as nx
 
@@ -71,3 +72,22 @@ class Map(BaseModel):
         # get length of route
         length = nx.dijkstra_path_length(G, start, end)
         return better_route, length
+
+    def lower_cost_path(self, start, end, autonomy, fuel_price):
+        """
+        Return better route and better cost of route.
+
+        Paramethers:
+            start (str): Some name of Route.start (model Route)
+            end (str): Some name of Route.end (model Route)
+            autonomy (decimal.Decimal): Autonomy of vehicle
+            fuel_price (decimal.Decimal): Value of fuel
+
+        Returns:
+            tuple when element 0 is a better route
+                       element 1 is a fuel cost of route
+        """
+        better_route, length = self.short_path(start, end)
+        quantity_of_fuel = Decimal(length) / Decimal(autonomy)
+        fuel_cost_total = Decimal(fuel_price) * quantity_of_fuel
+        return better_route, fuel_cost_total

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import pytest
 from django.db import IntegrityError
 from mixer.backend.django import mixer
@@ -82,3 +84,19 @@ class TestMap(object):
         short_path, lenght = map_.short_path(start='A', end='D')
         assert short_path == ['A', 'B', 'D']
         assert lenght == 25
+
+    def test_lower_cost_path(self):
+        routes = (
+            mixer.blend(Route, start='A', end='B', distance=10),
+            mixer.blend(Route, start='B', end='D', distance=15),
+            mixer.blend(Route, start='A', end='C', distance=20),
+            mixer.blend(Route, start='C', end='D', distance=30),
+            mixer.blend(Route, start='B', end='E', distance=50),
+            mixer.blend(Route, start='D', end='E', distance=30),
+        )
+        map_ = mixer.blend(Map, name='SP', routes=routes)
+        short_path, fuel_cost_total = map_.lower_cost_path(start='A', end='D',
+                                                           autonomy=10,
+                                                           fuel_price=2.5)
+        assert short_path == ['A', 'B', 'D']
+        assert fuel_cost_total == Decimal('6.25')
