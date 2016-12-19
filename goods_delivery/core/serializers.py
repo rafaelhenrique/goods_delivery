@@ -32,3 +32,10 @@ class MapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Map
         fields = ('id', 'name', 'routes')
+
+
+class PathSerializer(serializers.Serializer):
+    start = serializers.CharField(max_length=32)
+    end = serializers.CharField(max_length=32)
+    autonomy = serializers.DecimalField(max_digits=10, decimal_places=3)
+    fuel_price = serializers.DecimalField(max_digits=10, decimal_places=3)
