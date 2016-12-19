@@ -51,7 +51,14 @@ class MapDetailShortPathView(APIView):
             map_object = Map.objects.get(id=map_id)
             serializer = PathSerializer(data=request.data)
             if serializer.is_valid():
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                path, cost = map_object.lower_cost_path(
+                    start=serializer.data['start'],
+                    end=serializer.data['end'],
+                    autonomy=serializer.data['autonomy'],
+                    fuel_price=serializer.data['fuel_price'],
+                )
+                response = {'cost': cost, 'path': path}
+                return Response(response, status=status.HTTP_200_OK)
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
         except Map.DoesNotExist:
