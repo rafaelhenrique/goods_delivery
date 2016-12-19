@@ -123,3 +123,58 @@ class TestMapDetailView:
         url = reverse('core:map_detail', kwargs={'map_id': fake_uuid})
         resp = authorized_client.get(url, content_type='application/json')
         assert resp.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+class TestMapDetailShortPathView:
+
+    @pytest.fixture
+    def correct_payload(self):
+        payload = {
+            'start': 'A',
+            'end': 'D',
+            'autonomy': '10.0',
+            'fuel_price': '2.5',
+        }
+        return json.dumps(payload)
+
+    @pytest.fixture
+    def missing_fields_payload(self):
+        payload = {
+            'start': 'A',
+            'end': 'D',
+            'autonomy': '10.0',
+        }
+        return json.dumps(payload)
+
+    def setup(self):
+        self.routes = mixer.cycle(6).blend(Route)
+        self.map = mixer.blend(Map, routes=self.routes)
+        self.url = reverse('core:map_detail_short_path',
+                           kwargs={'map_id': str(self.map.id)})
+
+    def test_post_authorized_client(self, authorized_client, correct_payload):
+        resp = authorized_client.post(self.url, correct_payload,
+                                      content_type='application/json')
+        assert resp.status_code == status.HTTP_200_OK
+
+    def test_post_authorized_client_with_invalid_id(self, authorized_client,
+                                                    correct_payload):
+        fake_uuid = str(uuid4())
+        url = reverse('core:map_detail_short_path',
+                      kwargs={'map_id': fake_uuid})
+        resp = authorized_client.post(url, correct_payload,
+                                      content_type='application/json')
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_post_with_missing_fields(self, authorized_client,
+                                      missing_fields_payload):
+        resp = authorized_client.post(self.url,
+                                      missing_fields_payload,
+                                      content_type='application/json')
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_post_with_missing_data(self, authorized_client):
+        resp = authorized_client.post(self.url, {},
+                                      content_type='application/json')
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
